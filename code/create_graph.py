@@ -41,7 +41,8 @@ def graph_unique_coocc(doc, window_size=3):
         columns += [word_b_id, word_a_id]
         weights += [count, count]
 
-    adjacency = sp.csr_matrix((weights, (rows, columns)), shape=(len(unique_words), len(unique_words)))
+    adjacency = sp.csr_matrix((weights, (rows, columns)), shape=(len(unique_words), len(unique_words)),
+                                dtype=float)
 
     # TODO: Normalize?
 
@@ -57,10 +58,10 @@ def add_master_node(adjacency, word_idx):
     word_idx["MASTER NODE"] = len(word_idx)
 
     # add edges
-    new_adjacency = sp.hstack(adjacency, sp.csr_matrix([[1] for _ in adjacency]))
-    new_new_adjacency = sp.vstack(new_adjacency, sp.csr_matrix([[1 for _ in adjacency[0]]]))
+    adjacency = sp.hstack([adjacency, sp.csr_matrix([[1] for _ in adjacency])])
+    adjacency = sp.vstack([adjacency, sp.csr_matrix([[1 for _ in range(adjacency.shape[1])]])])
 
-    return new_new_adjacency, word_idx
+    return adjacency, word_idx
 
 # Transductive classification
 
