@@ -28,12 +28,11 @@ class DocumentGraphDataset(Dataset):
 		self.labels = self.embed_labels(raw_labels)
 
 	def embed_graphs(self, raw_graphs):
-		print(raw_graphs)
-		A, words = raw_graphs
+		As, docs = zip(*raw_graphs)
 
-		embeddings = [self.word2embedding[w] for w in words]
+		embeddings = [np.array([self.word2embedding[w] for w in doc]) for doc in docs]
 
-		return zip(A, embeddings)
+		return list(zip(As, embeddings))
 
 	def embed_labels(self, raw_labels):
 		labels = [self.label2number[l] for l in raw_labels]
@@ -52,15 +51,17 @@ class DocumentGraphDataset(Dataset):
 
 		return (A, nodes, y)
 
-	def prepare_batch(batch):
+	def prepare_batch(self, batch):
 		batch_A, batch_nodes, batch_y = zip(*batch)
 
 		n_graphs = len(batch_nodes)
+
 		max_n_nodes = max([nodes.shape[0] for nodes in batch_nodes])
+		embedding_size = batch_nodes[0].shape[1]
 		n_nodes = n_graphs * max_n_nodes
 
 		combined_A = lil_matrix((n_nodes, n_nodes))
-		combined_features = np.zeros(n_nodes)
+		combined_features = np.zeros((n_nodes, embedding_size))
 		for i, (A, features) in enumerate(zip(batch_A, batch_nodes)):
 			start_ix = i * max_n_nodes
 			combined_A[start_ix: start_ix + A.shape[0], start_ix: start_ix + A.shape[0]] = A
@@ -69,7 +70,7 @@ class DocumentGraphDataset(Dataset):
 		# convert to PyTorch data
 		torch_A = sparse_mx_to_torch_sparse_tensor(combined_A)
 		torch_features = torch.LongTensor(combined_features)
-		torch_y = torch.cat(batch_y)
+		torch_y = torch.LongTensor(batch_y)
 
 		return torch_A, torch_features, torch_y, torch.LongTensor([n_graphs])
 

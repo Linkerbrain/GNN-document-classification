@@ -48,10 +48,18 @@ PATH = "GNN-document-classification/data/reuters.train.1000.fr"
 docs, labels = get_clean_data(PATH)
 print("First doc (%s)\n" % labels[0], docs[0])
 
-adjacency, words = graph_unique_coocc(docs[0], window_size=2)
+raw_graphs = [graph_unique_coocc(docs[i], window_size=2) for i in range(10)]
+
+print(raw_graphs)
 
 label2number, word2embedding = make_mappings(labels, docs, embedding_type="onehot")
 
 # vis_graph(adjacency, word_idx)
 
-data = DocumentGraphDataset(labels, (adjacency, words), label2number, word2embedding)
+data = DocumentGraphDataset(labels, raw_graphs, label2number, word2embedding)
+
+dataloader = data.to_dataloader(batch_size=3, shuffle=True, drop_last=True)
+
+for batch_ix, batch in enumerate(dataloader):
+    print(batch)
+    break
