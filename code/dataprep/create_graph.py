@@ -1,4 +1,5 @@
 from collections import defaultdict
+import enum
 import scipy.sparse as sp
 
 # Inductive classification
@@ -24,7 +25,8 @@ def graph_unique_coocc(doc, window_size=3):
     """
     # make nodes
     unique_words = list(set(doc))
-    word_idx = {word: ix for ix, word in enumerate(unique_words)}
+    word2idx = {word: ix for ix, word in enumerate(unique_words)}
+    idx2word = {ix: word for ix, word in enumerate(unique_words)}
 
     # make edges
     co_occurences = count_co_occurences(doc, window_size)
@@ -33,8 +35,8 @@ def graph_unique_coocc(doc, window_size=3):
     columns = []
     weights = []
     for ((word_a, word_b), count) in co_occurences.items():
-        word_a_id = word_idx[word_a]
-        word_b_id = word_idx[word_b]
+        word_a_id = word2idx[word_a]
+        word_b_id = word2idx[word_b]
 
         # add twice for symmetry
         rows += [word_a_id, word_b_id]
@@ -46,28 +48,32 @@ def graph_unique_coocc(doc, window_size=3):
 
     # TODO: Normalize?
 
-    return adjacency, word_idx
+    return adjacency, unique_words
 
-def add_master_node(adjacency, word_idx):
+def add_master_node(adjacency, idx2word):
     """
     Adds master node to graph
 
     connected to everything
+
+    TODO the master node needs to be added to vocab for pipeline to work
+    TODO master node as first node since zeroes are padded at back
     """
     # make node
-    word_idx["MASTER NODE"] = len(word_idx)
+    idx2word[len(idx2word)] = "MASTER NODE"
 
     # add edges
     adjacency = sp.hstack([adjacency, sp.csr_matrix([[1] for _ in adjacency])])
     adjacency = sp.vstack([adjacency, sp.csr_matrix([[1 for _ in range(adjacency.shape[1])]])])
 
-    return adjacency, word_idx
+    return adjacency, idx2word
 
 # Transductive classification
 
 # TODO later
 
-
 # notes
 # dataloader dubbel copy
 # window size 1 kleiner dan verwacht
+# collate no master returned verkeerde nodes
+# 

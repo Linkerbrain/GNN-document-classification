@@ -61,16 +61,7 @@ def clean_docs(docs):
 
 # Fix Labels
 
-def to_numeric(raw_labels, classes=None):
-    if not classes:
-        classes = sorted(list(set(raw_labels)))
-
-    mapping = dict(zip(classes, range(0, len(classes))))
-
-    numeric = [mapping[l] for l in raw_labels]
-
-    return numeric
-
+# possible label preprocessing
 
 # All together
 
@@ -87,7 +78,6 @@ def get_clean_data(path):
 
     docs, labels = load_file(path)
 
-    c_docs = clean_docs(docs)
-    c_labels = to_numeric(labels)
+    docs = clean_docs(docs)
 
-    return c_docs, c_labels
+    return docs, labels

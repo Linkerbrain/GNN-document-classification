@@ -17,12 +17,8 @@ def plot_adjacency(adjacency, word_idx, marker_size=1):
 
     plt.show()
 
-def vis_graph(adjacency, word_idx):
+def vis_graph(adjacency, mapping):
     G = nx.from_scipy_sparse_matrix(adjacency)
-
-    mapping = {}
-    for word, idx in word_idx.items():
-        mapping[idx] = word
 
     G = nx.relabel_nodes(G, mapping)
 
