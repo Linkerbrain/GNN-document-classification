@@ -4,13 +4,15 @@ from gensim.models.keyedvectors import KeyedVectors
 
 # process corpus
 
-def make_vocab(docs, min_count = 1):
+def make_vocab(docs, min_count = 2):
     word_counter = Counter([word for doc in docs for word in doc])
 
     vocab = []
     for i, (word, count) in enumerate(word_counter.items()):
         if count >= min_count:
             vocab.append(word)
+
+    print("[dataprep] Found vocab of %d words (occuring at least %d times)" % (len(vocab), min_count))
 
     return vocab
 
@@ -28,7 +30,7 @@ def word2vec_embed(vocab, w2v_file):
             fail_rate += 1
             embedding[word] = np.random.uniform(-0.25, 0.25, 300)
 
-    print("[dataprep] Word2Vec embedding succesfully encoded %d/%d words"
+    print("[dataprep] Word2Vec embedding succesfully encoded %d/%d words in vocabulary"
             % (len(vocab)-fail_rate, len(vocab)))
 
     return embedding
@@ -42,6 +44,8 @@ def onehot_embed(vocab):
         vec = np.zeros(vector_length)
         vec[i] = 1
         embedding[word] = vec
+
+    print("[dataprep] Onehot-embedded with dimension %d" % (vector_length))
 
     return embedding
 

@@ -80,4 +80,6 @@ def get_clean_data(path):
 
     docs = clean_docs(docs)
 
+    print("[dataprep] Found and cleaned %d documents" % len(docs))
+
     return docs, labels

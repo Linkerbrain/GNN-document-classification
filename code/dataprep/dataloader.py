@@ -24,14 +24,33 @@ class DocumentGraphDataset(Dataset):
 		self.label2number = label2number
 		self.word2embedding = word2embedding
 
+		self.feature_count = self.word2embedding[next(iter(self.word2embedding))].shape[0]
+		self.class_count = len(self.label2number.keys())
+
 		self.graphs = self.embed_graphs(raw_graphs)
 		self.labels = self.embed_labels(raw_labels)
 
 	def embed_graphs(self, raw_graphs):
+		# This can also be done in the model, that's prob better TODO
+
 		As, docs = zip(*raw_graphs)
 
-		embeddings = [np.array([self.word2embedding[w] for w in doc]) for doc in docs]
+		embeddings = []
 
+		total_count = 0
+		fail_count = 0
+		for doc in docs:
+			doc_embed = []
+			for word in doc:
+				total_count += 1
+				if word in self.word2embedding.keys():
+					doc_embed.append(self.word2embedding[word])
+				else:
+					fail_count += 1
+					doc_embed.append(np.random.randn(self.feature_count)) # TODO: handle out of vocab better?
+			embeddings.append(np.array(doc_embed))
+		
+		print("[dataprep] Found embedding of %d/%d words" % (total_count-fail_count, total_count))
 		return list(zip(As, embeddings))
 
 	def embed_labels(self, raw_labels):
@@ -69,10 +88,10 @@ class DocumentGraphDataset(Dataset):
 
 		# convert to PyTorch data
 		torch_A = sparse_mx_to_torch_sparse_tensor(combined_A)
-		torch_features = torch.LongTensor(combined_features)
-		torch_y = torch.LongTensor(batch_y)
+		torch_features = torch.FloatTensor(combined_features)
+		torch_y = torch.FloatTensor(batch_y)
 
-		return torch_A, torch_features, torch_y, torch.LongTensor([n_graphs])
+		return torch_A, torch_features, torch_y, torch.FloatTensor([n_graphs])
 
 	def to_dataloader(self, batch_size, shuffle, drop_last):
 		return DataLoader(

@@ -37,29 +37,34 @@ V
 from dataprep.clean_data import get_clean_data
 from dataprep.corpus_tools import make_mappings
 from dataprep.create_graph import graph_unique_coocc
-
-
 from dataprep.dataloader import DocumentGraphDataset
 
 from debug.debug_graph import vis_graph
 
+from gym.trainer import Trainer
+
+from models.gcn import GCN
+
 PATH = "GNN-document-classification/data/reuters.train.1000.fr"
 
+HIDDEN_LAYER_SIZE = 100
+DROPOUT = 0.01
+
 docs, labels = get_clean_data(PATH)
-print("First doc (%s)\n" % labels[0], docs[0])
 
-raw_graphs = [graph_unique_coocc(docs[i], window_size=2) for i in range(10)]
-
-print(raw_graphs)
-
+raw_graphs = [graph_unique_coocc(d, window_size=2) for d in docs]
+# label2number, word2embedding = make_mappings(labels, docs, embedding_type="word2vec", w2v_file="mpad/embeddings/GoogleNews-vectors-negative300.bin")
 label2number, word2embedding = make_mappings(labels, docs, embedding_type="onehot")
 
 # vis_graph(adjacency, word_idx)
 
 data = DocumentGraphDataset(labels, raw_graphs, label2number, word2embedding)
-
 dataloader = data.to_dataloader(batch_size=3, shuffle=True, drop_last=True)
 
-for batch_ix, batch in enumerate(dataloader):
-    print(batch)
-    break
+model = GCN(data.feature_count, HIDDEN_LAYER_SIZE, data.class_count, DROPOUT)
+
+print(model)
+
+trainer = Trainer(dataloader, model)
+
+trainer.train_epoch()
