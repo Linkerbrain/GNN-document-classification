@@ -1,4 +1,8 @@
 """
+Using PyTorch Geometric
+
+for me it only worked on Cuda 10.2 Pytorch 1.7.0
+
 Pipeline Architecture
 
 0. Raw (Reuters) Data (big .tsv file)
@@ -12,9 +16,9 @@ V
 |       make label dic
 |       make corpus vocab
 |       embed corpus coab
-|  - create_graph.py [docs -> list of raw_graphs (Adjacency, index2word)]
+|  - create_graph.py [docs -> list of raw_graphs (edge_indexes, words)]
 | |     create doc graph
---- data_loader.py [labels, raw_graphs, label2number, word2embedding -> DataLoader]
+--- dataloader.py [labels, raw_graphs, label2number, word2embedding -> DataLoader]
 |       embed labels
 |       embed words
 |       combine graphs
@@ -37,7 +41,7 @@ V
 from dataprep.clean_data import get_clean_data
 from dataprep.corpus_tools import make_mappings
 from dataprep.create_graph import graph_unique_coocc
-from dataprep.dataloader import DocumentGraphDataset
+from dataprep.dataprovider import DataProvider
 
 from debug.debug_graph import vis_graph
 
@@ -52,19 +56,22 @@ DROPOUT = 0.01
 
 docs, labels = get_clean_data(PATH)
 
+label_embeddings, word_embeddings = make_mappings(labels, docs, embedding_type="onehot")
 raw_graphs = [graph_unique_coocc(d, window_size=2) for d in docs]
 # label2number, word2embedding = make_mappings(labels, docs, embedding_type="word2vec", w2v_file="mpad/embeddings/GoogleNews-vectors-negative300.bin")
-label2number, word2embedding = make_mappings(labels, docs, embedding_type="onehot")
 
 # vis_graph(adjacency, word_idx)
+data = DataProvider(labels, raw_graphs, label_embeddings, word_embeddings)
+print(data.performance_summary())
 
-data = DocumentGraphDataset(labels, raw_graphs, label2number, word2embedding)
-dataloader = data.to_dataloader(batch_size=3, shuffle=True, drop_last=True)
+dataloader = data.to_dataloader(batch_size=3, shuffle=True)
 
-model = GCN(data.feature_count, HIDDEN_LAYER_SIZE, data.class_count, DROPOUT)
+print(next(iter(dataloader)))
 
-print(model)
+# model = GCN(data.feature_count, HIDDEN_LAYER_SIZE, data.class_count, DROPOUT)
 
-trainer = Trainer(dataloader, model)
+# print(model)
 
-trainer.train_epoch()
+# trainer = Trainer(dataloader, model)
+
+# trainer.train_epoch()

@@ -1,7 +1,5 @@
 import numpy as np
 from collections import Counter, OrderedDict
-from gensim.models.keyedvectors import KeyedVectors
-
 # process corpus
 
 def make_vocab(docs, min_count = 2):
