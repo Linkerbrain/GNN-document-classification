@@ -1,5 +1,6 @@
 import numpy as np
 from collections import Counter, OrderedDict
+from gensim.models.keyedvectors import KeyedVectors
 # process corpus
 
 def make_vocab(docs, min_count = 2):
@@ -58,7 +59,8 @@ def embed_vocab(vocab, embedding_type="onehot", **kwargs):
 def make_label_mapping(labels):
     classes = sorted(list(set(labels)))
 
-    mapping = onehot_embed(classes)
+    mapping = {label : int(i) for i, label in enumerate(classes)}
+    print(mapping)
 
     return mapping
 

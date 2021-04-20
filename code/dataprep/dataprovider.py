@@ -19,21 +19,23 @@ class DataProvider():
 
         # create graphs
         self.label_embeddings = label_embeddings
-        self.label_size = self.label_embeddings[next(iter(self.label_embeddings))].shape[0]
+        self.label_size = 4 # TODO
 
         self.word_embeddings = word_embeddings
         self.feature_size = self.word_embeddings[next(iter(self.word_embeddings))].shape[0]
 
         self.graphs = self.embed_graphs(raw_labels, raw_graphs)
 
+    def __getitem__(self, index):
+        return self.graphs[index]
 
     def embed_label(self, label):
         self.label_total += 1
         if label in self.label_embeddings.keys():
-            return torch.tensor(self.label_embeddings[label], dtype=torch.long) # maybe float? for if not onehotencoded
+            return torch.tensor([self.label_embeddings[label]], dtype=torch.long) # maybe float? for if not onehotencoded
         else:
             self.label_fails += 1
-            return torch.tensor(np.eye(self.label_size), dtype=torch.long) # we just encode as the first label
+            return torch.tensor([np.eye(self.label_size)], dtype=torch.long) # we just encode as the first label
 
     def embed_nodes(self, nodes):
         embedding = []

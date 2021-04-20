@@ -1,47 +1,40 @@
 import torch
 from torch import optim
 from tqdm import tqdm
+import torch.nn.functional as F
 
 class Trainer():
-    def __init__(self, dataloader, model=None,
-                lr=0.1):
-        self.model = model
-        self.dataloader = dataloader
-
+    def __init__(self, dataloader, model=None, datacount = 1):
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
         print("[gym] Working with device:", self.device)
 
-        self.optimizer = optim.Adam(self.model.parameters(), lr=lr)
-        self.scheduler = optim.lr_scheduler.StepLR(
-            self.optimizer, step_size=50, gamma=0.5
-        )
-        self.criterion = torch.nn.CrossEntropyLoss()
+        self.model = model.to(self.device)
+        self.dataloader = dataloader
+
+
+        self.optimizer = torch.optim.Adam(model.parameters(), lr=0.0005)
 
         self.epoch = 0
+        self.datacount = datacount
 
     def train_epoch(self):
         if not self.model:
             print("[gym] No model loaded!")
             return
 
-        for batch_ix, batch in enumerate(self.dataloader):
-            batch = (t.to(self.device) for t in batch)
-            A, nodes, y, n_graphs = batch
+        self.model.train()
 
-            preds = self.model(nodes, A)
-
-            print(preds)
-
-            loss = self.criterion(preds, y)
-
+        loss_all = 0
+        for data in tqdm(self.dataloader):
+            data = data.to(self.device)
             self.optimizer.zero_grad()
+            output = self.model(data)
+
+            loss = F.nll_loss(output, data.y)
             loss.backward()
-
-            # grad norm clipping?
+            loss_all += data.num_graphs * loss.item()
             self.optimizer.step()
-            self.scheduler.step()
-
-            print("Batch %d, loss %.5f" % (batch_ix, loss.item()))
+        return loss_all / self.datacount
 
     def save_model(self, path):
         pass
