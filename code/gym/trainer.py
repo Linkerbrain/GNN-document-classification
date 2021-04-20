@@ -1,31 +1,36 @@
+from numpy.core.numeric import indices
 import torch
 from torch import optim
 from tqdm import tqdm
 import torch.nn.functional as F
 
+from sklearn.model_selection import train_test_split
+import numpy as np
+
 class Trainer():
-    def __init__(self, dataloader, model=None, datacount = 1):
+    def __init__(self, data, model, val_perc=0.3, batch_size=20):
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
         print("[gym] Working with device:", self.device)
 
         self.model = model.to(self.device)
-        self.dataloader = dataloader
 
+        all_indices = list(range(len(data)))
+
+        self.train_loader, self.test_loader = data.to_dataloader(batch_size, test_size=val_perc)
 
         self.optimizer = torch.optim.Adam(model.parameters(), lr=0.0005)
-
         self.epoch = 0
-        self.datacount = datacount
+
+        self.train_size = len(self.train_loader.dataset)
+        self.test_size = len(self.test_loader.dataset)
+
+        print("[gym] Training on %i, testing on %i" % (self.train_size, self.test_size))
 
     def train_epoch(self):
-        if not self.model:
-            print("[gym] No model loaded!")
-            return
-
         self.model.train()
 
         loss_all = 0
-        for data in tqdm(self.dataloader):
+        for data in self.train_loader:
             data = data.to(self.device)
             self.optimizer.zero_grad()
             output = self.model(data)
@@ -34,7 +39,17 @@ class Trainer():
             loss.backward()
             loss_all += data.num_graphs * loss.item()
             self.optimizer.step()
-        return loss_all / self.datacount
+        return loss_all / self.train_size
+
+    def validate(self):
+        self.model.eval()
+
+        correct = 0
+        for data in self.test_loader:
+            data = data.to(self.device)
+            pred = self.model(data).max(dim=1)[1]
+            correct += pred.eq(data.y).sum().item()
+        return correct / self.test_size
 
     def save_model(self, path):
         pass

@@ -2,6 +2,8 @@ import torch
 from torch_geometric.data import Data
 from torch_geometric.data import DataLoader
 import numpy as np
+from tqdm import tqdm
+import random
 
 class DataProvider():
     """
@@ -29,6 +31,9 @@ class DataProvider():
     def __getitem__(self, index):
         return self.graphs[index]
 
+    def __len__(self):
+        return len(self.graphs)
+
     def embed_label(self, label):
         self.label_total += 1
         if label in self.label_embeddings.keys():
@@ -52,7 +57,8 @@ class DataProvider():
     def embed_graphs(self, raw_labels, raw_graphs):
         all_graphs = []
 
-        for i in range(len(raw_graphs)):
+        print("[dataprep] Embedding graphs...")
+        for i in tqdm(range(len(raw_graphs))):
             label = raw_labels[i]
             ((edge_indices, edge_weights), nodes) = raw_graphs[i]
 
@@ -69,11 +75,17 @@ class DataProvider():
 
         return all_graphs
 
-    def to_dataloader(self, batch_size, shuffle=True, test_split=1):
-        if test_split == 1:
-            return DataLoader(self.graphs, batch_size, shuffle)
-        
-        raise NotImplementedError("We can maybe return multiple dataloaders here for train/dev/test")
+    def to_dataloader(self, batch_size, shuffle=True, test_size=None):
+        if test_size:
+            # make a train and test dataloader
+            random.shuffle(self.graphs)
+
+            split_n = int(len(self.graphs) * (1-test_size))
+
+            return DataLoader(self.graphs[:split_n], batch_size, shuffle), DataLoader(self.graphs[split_n:], batch_size, shuffle)
+
+        return DataLoader(self.graphs, batch_size, shuffle)
+
 
     def performance_summary(self):
         tag = "[dataprep] "
