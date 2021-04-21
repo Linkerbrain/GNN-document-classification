@@ -4,22 +4,29 @@ from torch_geometric.nn import GraphConv, TopKPooling
 from torch_geometric.nn import global_mean_pool as gap, global_max_pool as gmp
 
 class SimpleGCN(torch.nn.Module):
-    def __init__(self, input_size, output_size):
+    def __init__(self, vocab_size, feature_size, num_labels):
         super(SimpleGCN, self).__init__()
 
-        self.conv1 = GraphConv(input_size, 128)
-        self.pool1 = TopKPooling(128, ratio=0.8)
-        self.conv2 = GraphConv(128, 128)
-        self.pool2 = TopKPooling(128, ratio=0.8)
-        self.conv3 = GraphConv(128, 128)
-        self.pool3 = TopKPooling(128, ratio=0.8)
+        self.embedding = torch.nn.Embedding(vocab_size, feature_size)
 
-        self.lin1 = torch.nn.Linear(256, 128)
+        # feature_size feature_size feature_size feature_size
+        self.conv1 = GraphConv(feature_size, feature_size)
+        self.pool1 = TopKPooling(feature_size, ratio=0.8)
+        self.conv2 = GraphConv(feature_size, feature_size)
+        self.pool2 = TopKPooling(feature_size, ratio=0.8)
+        self.conv3 = GraphConv(feature_size, feature_size)
+        self.pool3 = TopKPooling(feature_size, ratio=0.8)
+
+        self.lin1 = torch.nn.Linear(feature_size*2, 128)
         self.lin2 = torch.nn.Linear(128, 64)
-        self.lin3 = torch.nn.Linear(64, output_size)
+        self.lin3 = torch.nn.Linear(64, num_labels)
 
     def forward(self, data):
         x, edge_index, batch = data.x, data.edge_index, data.batch
+        
+        # TODO HANDLE EDGE WEIGHTS
+
+        x = self.embedding(x).squeeze()
 
         x = F.relu(self.conv1(x, edge_index))
         x, edge_index, _, batch, _, _ = self.pool1(x, edge_index, None, batch)
@@ -38,6 +45,6 @@ class SimpleGCN(torch.nn.Module):
         x = F.relu(self.lin1(x))
         x = F.dropout(x, p=0.5, training=self.training)
         x = F.relu(self.lin2(x))
-        x = F.log_softmax(self.lin3(x))
+        x = F.log_softmax(self.lin3(x), dim=0)
 
         return x

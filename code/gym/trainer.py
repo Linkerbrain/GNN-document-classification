@@ -9,20 +9,18 @@ import numpy as np
 
 class Trainer():
     def __init__(self, data, model, val_perc=0.3, batch_size=20):
-        self.device = "cuda" if torch.cuda.is_available() else "cpu"
+        # self.device = "cuda" if torch.cuda.is_available() else "cpu"
+        self.device = "cpu"
         print("[gym] Working with device:", self.device)
 
         self.model = model.to(self.device)
-
-        all_indices = list(range(len(data)))
+        self.optimizer = torch.optim.Adam(model.parameters(), lr=0.0005)
 
         self.train_loader, self.test_loader = data.to_dataloader(batch_size, test_size=val_perc)
 
-        self.optimizer = torch.optim.Adam(model.parameters(), lr=0.0005)
-        self.epoch = 0
-
         self.train_size = len(self.train_loader.dataset)
         self.test_size = len(self.test_loader.dataset)
+        self.epoch = 0
 
         print("[gym] Training on %i, testing on %i" % (self.train_size, self.test_size))
 
@@ -39,6 +37,9 @@ class Trainer():
             loss.backward()
             loss_all += data.num_graphs * loss.item()
             self.optimizer.step()
+
+        self.epoch += 1
+
         return loss_all / self.train_size
 
     def validate(self):

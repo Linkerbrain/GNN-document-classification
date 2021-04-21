@@ -65,7 +65,7 @@ def clean_docs(docs):
 
 # All together
 
-def get_clean_data(path):
+def clean_data(path):
     """
     Combines all dataprep functions,
         loads data

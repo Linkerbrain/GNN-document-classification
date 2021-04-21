@@ -1,44 +1,72 @@
 """
-Using PyTorch Geometric
-
-for me it only worked on Cuda 10.2 Pytorch 1.7.0
+Document Classification using Graph Neural Networks
+Using PyTorch Geometric 1.7.0, Cuda 10.2, Pytorch 1.7.0
 
 Pipeline Architecture
 
+0 ---------------------------- some doc dataset ---------------------------------------
+                                    |
+                               clean_data.py
+                                    |
+                                    V
+1 ---------------------------- docs, labels -------------------------------
+                   |                                  |
+inductive_graph.py or transductive_graph.py        vocab.py 
+                   |                                  |
+                   V                                  V
+2 -------  edge_indices, nodes --------  word_vocab, label_vocab ----------
+                                    |
+                                    |
+            inductive_dataloader.py or transductive_dataloader.py
+                                    |
+                                    |
+                                    V
+3 ----------------------------  dataloader  -------------------------------
+                                    |
+                                    |
+                                trainer.py   <========== Model
+                                    |
+                                    |
+                                    V
+4 -#-#-#-#-#-#-#-#-#-#-#-#-#   Results   #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
+
 """
+from dataprep.clean_data import clean_data
+from dataprep.vocab import vocab
+from dataprep.inductive_graph import inductive_graph
 
-from dataprep.clean_data import get_clean_data
-from dataprep.corpus_tools import make_mappings
-from dataprep.create_graph import graph_unique_coocc
-from dataprep.dataprovider import DataProvider
-
-from debug.debug_graph import vis_graph
+from dataprep.inductive_dataset import InductiveDataSet
 
 from gym.trainer import Trainer
 
 from models.simple_gcn import SimpleGCN
 
-PATH = "../data/reuters.train.1000.fr"
 
-LIMIT = None
+# Hyperparameters
+PATH = "../data/reuters.train.10000.fr"
+MIN_WORD_COUNT = 2
+FEATURE_SIZE = 64
+BATCH_SIZE = 64
 EPOCHS = 100
-BATCH_SIZE = 5
 
-docs, labels = get_clean_data(PATH)
+# Da program
+# 0 load in data
+docs, labels = clean_data(PATH)
 
-label_embeddings, word_embeddings = make_mappings(labels, docs, embedding_type="onehot")
-raw_graphs = [graph_unique_coocc(d, window_size=2) for d in docs[:LIMIT]]
-# label2number, word2embedding = make_mappings(labels, docs, embedding_type="word2vec", w2v_file="mpad/embeddings/GoogleNews-vectors-negative300.bin")
+# 1 process data
+word_vocab, label_vocab = vocab(docs, labels, min_word_count=MIN_WORD_COUNT)
 
-# vis_graph(adjacency, word_idx)
-data = DataProvider(labels, raw_graphs, label_embeddings, word_embeddings)
-print(data.performance_summary())
+graphs = inductive_graph(docs)
 
-model = SimpleGCN(data.feature_size, data.label_size)
+# 2 make dataloder
+data = InductiveDataSet(graphs, labels, word_vocab, label_vocab)
 
-# print(model)
+print(data[0], next(iter(data.to_dataloader(60))))
 
-trainer = Trainer(data, model)
+# 3 make & train model
+model = SimpleGCN(data.vocab_size, FEATURE_SIZE, data.label_count)
+
+trainer = Trainer(data, model, batch_size=BATCH_SIZE)
 
 for i in range(EPOCHS):
     loss = trainer.train_epoch()

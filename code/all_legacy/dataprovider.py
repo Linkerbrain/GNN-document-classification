@@ -24,7 +24,8 @@ class DataProvider():
         self.label_size = 4 # TODO
 
         self.word_embeddings = word_embeddings
-        self.feature_size = self.word_embeddings[next(iter(self.word_embeddings))].shape[0]
+        self.feature_size = 1
+        # self.feature_size = self.word_embeddings[next(iter(self.word_embeddings))].shape[0
 
         self.graphs = self.embed_graphs(raw_labels, raw_graphs)
 
@@ -50,9 +51,9 @@ class DataProvider():
                 embedding.append(self.word_embeddings[node])
             else:
                 self.word_fails += 1
-                embedding.append(np.random.randn(self.feature_size)) # OOV is random simple vector for now
+                embedding.append(self.word_embeddings["__OOV__"])
 
-        return torch.tensor(embedding, dtype=torch.float)
+        return torch.tensor(embedding, dtype=torch.long)
 
     def embed_graphs(self, raw_labels, raw_graphs):
         all_graphs = []
