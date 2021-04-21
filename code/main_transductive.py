@@ -33,9 +33,9 @@ inductive_graph.py or transductive_graph.py        vocab.py
 """
 from dataprep.clean_data import clean_data
 from dataprep.vocab import vocab
-from dataprep.inductive_graph import inductive_graph
+from dataprep.transductive_graph import transductive_graph
 
-from dataprep.inductive_dataset import InductiveDataSet
+from dataprep.transductive_dataset import TransductiveDataSet
 
 from gym.trainer import Trainer
 
@@ -43,7 +43,7 @@ from models.simple_gcn import SimpleGCN
 
 
 # Hyperparameters
-PATH = "../data/reuters.train.10000.fr"
+PATH = "../data/reuters.train.1000.fr"
 MIN_WORD_COUNT = 2
 FEATURE_SIZE = 64
 BATCH_SIZE = 64
@@ -56,19 +56,19 @@ docs, labels = clean_data(PATH)
 # 1 process data
 word_vocab, label_vocab = vocab(docs, labels, min_word_count=MIN_WORD_COUNT)
 
-graphs = inductive_graph(docs)
+graph = transductive_graph(docs)
 
 # 2 make dataloder
-data = InductiveDataSet(graphs, labels, word_vocab, label_vocab)
+# data = TransductiveDataSet(graph, labels, word_vocab, label_vocab)
 
-print(data[0], next(iter(data.to_dataloader(60))))
+# print(data[0], next(iter(data.to_dataloader(60))))
 
-# 3 make & train model
-model = SimpleGCN(data.vocab_size, FEATURE_SIZE, data.label_count)
+# # 3 make & train model
+# model = SimpleGCN(data.vocab_size, FEATURE_SIZE, data.label_count)
 
-trainer = Trainer(data, model, batch_size=BATCH_SIZE)
+# trainer = Trainer(data, model, batch_size=BATCH_SIZE)
 
-for i in range(EPOCHS):
-    loss = trainer.train_epoch()
-    acc = trainer.validate()
-    print("[Epoch %d] Accuracy %.5f Loss %.5f" % (i, acc, loss))
+# for i in range(EPOCHS):
+#     loss = trainer.train_epoch()
+#     acc = trainer.validate()
+#     print("[Epoch %d] Accuracy %.5f Loss %.5f" % (i, acc, loss))

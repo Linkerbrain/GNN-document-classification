@@ -5,8 +5,9 @@ from torch_geometric.data import Data
 from torch_geometric.data import DataLoader
 from tqdm import tqdm
 
-class InductiveDataset():
-    def __init__(self, graphs, labels, word_vocab, label_vocab):
+class TransductiveDataset():
+    # TODO this is currently a copy of inductive i will do it tommorow bye
+    def __init__(self, graph, labels, word_vocab, label_vocab):
         # vocabs for later
         self.word_vocab = word_vocab
         self.label_vocab = label_vocab
