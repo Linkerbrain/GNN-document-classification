@@ -7,7 +7,7 @@ import torch.nn.functional as F
 from sklearn.model_selection import train_test_split
 import numpy as np
 
-class Trainer():
+class InductiveTrainer():
     def __init__(self, data, model, val_perc=0.3, batch_size=20):
         # self.device = "cuda" if torch.cuda.is_available() else "cpu"
         self.device = "cpu"

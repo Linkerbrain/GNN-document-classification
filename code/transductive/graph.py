@@ -1,7 +1,8 @@
 from .graph_utils import count_co_occurences
-from .vocab import create_idx_mapping
 from collections import Counter, defaultdict
 from math import log
+
+from dataprep.vocab import create_idx_mapping
 
 def docname(i):
     return "_DOC"+str(i)+"_"
@@ -11,7 +12,7 @@ def textgcn_paper(docs, window_size=4):
     all_unique_words = list(set(all_words))
     doc_names = [docname(i) for i in range(len(docs))]
 
-    nodes = all_unique_words+doc_names
+    nodes = doc_names+all_unique_words
     word2idx = create_idx_mapping(nodes)
 
     rows = []
@@ -97,7 +98,7 @@ def transductive_graph(docs, method="text gcn paper", **kwargs):
         returns graphs represented as edge indexes and words
     """
     if method == "text gcn paper":
-        graphs = [textgcn_paper(doc, **kwargs) for doc in docs]
+        graphs = textgcn_paper(docs, **kwargs)
         return graphs
     
-    raise NotImplementedError("[dataprep] %s inductive graphingis not yet implemented")
+    raise NotImplementedError("[dataprep] graphing method %s is not implemented" % method)

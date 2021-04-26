@@ -3,9 +3,9 @@ import torch.nn.functional as F
 from torch_geometric.nn import GraphConv, TopKPooling
 from torch_geometric.nn import global_mean_pool as gap, global_max_pool as gmp
 
-class SimpleGCN(torch.nn.Module):
+class TopK(torch.nn.Module):
     def __init__(self, vocab_size, feature_size, num_labels):
-        super(SimpleGCN, self).__init__()
+        super(TopK, self).__init__()
 
         self.embedding = torch.nn.Embedding(vocab_size, feature_size)
 
@@ -48,3 +48,6 @@ class SimpleGCN(torch.nn.Module):
         x = F.log_softmax(self.lin3(x), dim=0)
 
         return x
+
+    def __str__(self):
+        return "TopK"
