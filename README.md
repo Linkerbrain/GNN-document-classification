@@ -2,4 +2,10 @@
  
 big_test.py to test a bunch of models
 
-![plot](./quick_results.png)
+Really rough early results testing on large dataset:
+
+![7000](./7000_test.png)
+
+And small dataset:
+
+![700](./700_test.png)
