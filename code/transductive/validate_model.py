@@ -12,6 +12,11 @@ from transductive.trainer import TransductiveTrainer
 
 def transductive_test(path, graph_method_name, model_class, \
                     epochs, feature_size, min_word_count, batch_size):
+    results = {}
+
+    results["loss"] = []
+    results["accuracy"] = []
+
     # 0 load in data
     docs, labels = clean_data(path)
 
@@ -32,3 +37,10 @@ def transductive_test(path, graph_method_name, model_class, \
         loss = trainer.train_epoch()
         acc = trainer.validate()
         print("[Epoch %d] Accuracy %.5f Loss %.5f" % (i, acc, loss))
+
+        results["loss"].append(loss)
+        results["accuracy"].append(acc)
+
+    results["model"] = model
+
+    return results
