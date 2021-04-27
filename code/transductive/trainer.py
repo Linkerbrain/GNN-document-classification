@@ -8,9 +8,8 @@ from sklearn.model_selection import train_test_split
 import numpy as np
 
 class TransductiveTrainer():
-    def __init__(self, data, model, val_perc=0.3):
-        # self.device = "cuda" if torch.cuda.is_available() else "cpu"
-        self.device = "cpu"
+    def __init__(self, data, model, val_perc=0.3, try_gpu=True):
+        self.device = "cuda" if try_gpu and torch.cuda.is_available() else "cpu"
         print("[gym] Working with device:", self.device)
 
         self.model = model.to(self.device)
@@ -25,6 +24,13 @@ class TransductiveTrainer():
         self.epoch = 0
 
         print("[gym] Training on %i, testing on %i" % (self.train_size, self.test_size))
+
+        # cuda test
+        self.graph = self.graph.to(self.device)
+        self.train_labels = self.train_labels.to(self.device)
+        self.train_label_idxs = self.train_label_idxs.to(self.device)
+        self.test_labels = self.test_labels.to(self.device)
+        self.test_label_idxs = self.test_label_idxs.to(self.device)
 
     def train_epoch(self):
         self.model.train()

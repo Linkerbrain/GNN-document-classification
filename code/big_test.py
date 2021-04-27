@@ -4,8 +4,8 @@ import re
 
 # this is not very pretty but enough to test all the models on the infrastructure 
 
-from inductive.test_model import inductive_test
-from transductive.test_model import transductive_test
+from inductive.validate_model import inductive_test
+from transductive.validate_model import transductive_test
 
 from models.inductive.gcn import TwoLayerGCNLinearHead
 from models.inductive.topkpooling import TopK
@@ -18,17 +18,18 @@ inductive_models = [TwoLayerGCNLinearHead, TopK, ModelProteinBest]
 transductive_models = [TwoLayerGCN, GAT, SuperGAT, AGNN]
 
 # config
-TEST_NAME = "firstnight"
+TEST_NAME = "GPU_on_1K"
 
-DATA_PATH = r"C:\Users\Lodewijk\Desktop\scriptie\GNN-document-classification\data\reuters.train.10000.fr"
+DATA_PATH = r"C:\Users\Lodewijk\Desktop\scriptie\GNN-document-classification\data\reuters.train.1000.fr"
 RESULT_FOLDER = r"C:\Users\Lodewijk\Desktop\scriptie\GNN-document-classification\results\ "
 
-EPOCHS = 160
+EPOCHS = 512
 BATCH_SIZE = 256
 
 FEATURE_SIZE = 128
 
 MIN_WORD_COUNT = 2 # (for vocab)
+TRY_GPU = True
 
 # prepare
 result_location = RESULT_FOLDER + TEST_NAME + '\\'
@@ -37,7 +38,7 @@ os.makedirs(result_location, exist_ok=True)
 # transductive
 for model in transductive_models:
     print(" --- Now Testing: --- ", str(model))
-    results = transductive_test(DATA_PATH, "text gcn paper", model, epochs=EPOCHS, feature_size=FEATURE_SIZE, min_word_count=MIN_WORD_COUNT, batch_size=BATCH_SIZE)
+    results = transductive_test(DATA_PATH, "text gcn paper", model, epochs=EPOCHS, feature_size=FEATURE_SIZE, min_word_count=MIN_WORD_COUNT, try_gpu=TRY_GPU)
 
     result_df = pd.DataFrame(results)
 
@@ -48,7 +49,7 @@ for model in transductive_models:
 # inductive
 for model in inductive_models:
     print(" --- Now Testing: --- ", str(model))
-    results = inductive_test(DATA_PATH, "unique co-occurence", model, epochs=EPOCHS, feature_size=FEATURE_SIZE, min_word_count=MIN_WORD_COUNT, batch_size=BATCH_SIZE)
+    results = inductive_test(DATA_PATH, "unique co-occurence", model, epochs=EPOCHS, feature_size=FEATURE_SIZE, min_word_count=MIN_WORD_COUNT, batch_size=BATCH_SIZE, try_gpu=TRY_GPU)
 
     result_df = pd.DataFrame(results)
 

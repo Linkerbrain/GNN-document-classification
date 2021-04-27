@@ -11,7 +11,7 @@ from inductive.dataset import InductiveDataset
 from inductive.trainer import InductiveTrainer
 
 def inductive_test(path, graph_method_name, model_class, \
-                    epochs, feature_size, min_word_count, batch_size):
+                    epochs, feature_size, min_word_count, batch_size, try_gpu):
      results = {}
 
      results["loss"] = []
@@ -33,7 +33,7 @@ def inductive_test(path, graph_method_name, model_class, \
      # 3 make & train model
      model = model_class(data.vocab_size, feature_size, data.label_count)
 
-     trainer = InductiveTrainer(data, model, batch_size=batch_size)
+     trainer = InductiveTrainer(data, model, batch_size=batch_size, try_gpu=try_gpu)
 
      for i in range(epochs):
           loss = trainer.train_epoch()
