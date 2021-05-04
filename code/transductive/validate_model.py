@@ -11,7 +11,7 @@ from transductive.dataset import TransductiveDataset
 from transductive.trainer import TransductiveTrainer
 
 def transductive_test(path, graph_method_name, model_class, \
-                    epochs, feature_size, min_word_count, try_gpu):
+                    epochs, feature_size, val_perc, min_word_count, try_gpu, model_kwargs={}):
     results = {}
 
     results["loss"] = []
@@ -29,14 +29,14 @@ def transductive_test(path, graph_method_name, model_class, \
     data = TransductiveDataset(graph, labels, word_vocab, label_vocab)
 
     # # 3 make & train model
-    model = model_class(data.vocab_size, feature_size, data.label_count)
+    model = model_class(data.vocab_size, feature_size, data.label_count, **model_kwargs)
 
-    trainer = TransductiveTrainer(data, model, try_gpu=try_gpu)
+    trainer = TransductiveTrainer(data, model, val_perc=val_perc, try_gpu=try_gpu)
 
     for i in range(epochs):
         loss = trainer.train_epoch()
         acc = trainer.validate()
-        print("[Epoch %d] Accuracy %.5f Loss %.5f" % (i, acc, loss))
+        print("[Epoch %d] Accuracy %.5f Loss %.9f" % (i, acc, loss))
 
         results["loss"].append(loss)
         results["accuracy"].append(acc)

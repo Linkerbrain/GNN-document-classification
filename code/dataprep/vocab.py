@@ -10,16 +10,15 @@ def create_idx_mapping(list):
     return index_mapping
 
 def build_word_vocab(docs, min_count=1, extra_tokens=["___UNK___"]):
-    all_words = [word for doc in docs for word in docs]
-
+    all_words = [word for doc in docs for word in doc]
     if min_count == 1:
         unique_words = list(set(all_words)) + extra_tokens
         return create_idx_mapping(unique_words)
 
-    word_counter = Counter([word for doc in docs for word in doc])
+    word_counter = Counter(all_words)
 
     common_words = []
-    for i, (word, count) in enumerate(word_counter.items()):
+    for (word, count) in word_counter.items():
         if count >= min_count:
             common_words.append(word)
 

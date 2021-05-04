@@ -2,6 +2,8 @@ from .graph_utils import count_co_occurences
 from collections import Counter, defaultdict
 from math import log
 
+import numpy as np
+
 from dataprep.vocab import create_idx_mapping
 
 def docname(i):
@@ -39,7 +41,7 @@ def textgcn_paper(docs, window_size=4):
         if pmi <= 0:
             continue
         
-        word_a_id = word2idx[word_a]
+        word_a_id =  word2idx[word_a] # np.random.randint(len(docs), len(docs)+len(all_unique_words))
         word_b_id = word2idx[word_b]
 
         # add twice for symmetry
@@ -83,7 +85,7 @@ def textgcn_paper(docs, window_size=4):
 
     edges = ([rows, columns], weights)
 
-    ### Self edges (maybe not neccesary in Pytorch Geometric (??))
+    ### Self edges (could also be added with add self loops=True)
 
     for i in range(len(nodes)):
         rows.append(i)

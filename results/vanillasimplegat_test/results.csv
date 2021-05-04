@@ -1,0 +1,31 @@
+Vanilla 1 Layer GCN,40,80,0.7875
+Vanilla 2 Layer GCN,40,80,0.7375
+Vanilla 4 Layer GCN,40,80,0.6625
+1 hop SimpleGCN,40,80,0.85
+3 hop SimpleGCN,40,80,0.9
+2 Layer 4 Heads Concat GatGCN,40,80,0.75
+2 Layer 2 Heads Concat GatGCN,40,80,0.725
+2 Layer 4 Heads NonConcat GatGCN,40,80,0.725
+Vanilla 1 Layer GCN,40,160,0.60625
+Vanilla 2 Layer GCN,40,160,0.75
+Vanilla 4 Layer GCN,40,160,0.44375
+1 hop SimpleGCN,40,160,0.74375
+3 hop SimpleGCN,40,160,0.75625
+2 Layer 4 Heads Concat GatGCN,40,160,0.625
+2 Layer 2 Heads Concat GatGCN,40,160,0.475
+2 Layer 4 Heads NonConcat GatGCN,40,160,0.65625
+Vanilla 1 Layer GCN,40,320,0.575
+Vanilla 2 Layer GCN,40,320,0.690625
+Vanilla 4 Layer GCN,40,320,0.540625
+1 hop SimpleGCN,40,320,0.45
+3 hop SimpleGCN,40,320,0.75625
+2 Layer 4 Heads Concat GatGCN,40,320,0.58125
+2 Layer 2 Heads Concat GatGCN,40,320,0.4625
+2 Layer 4 Heads NonConcat GatGCN,40,320,0.571875
+Vanilla 1 Layer GCN,40,640,0.54375
+Vanilla 2 Layer GCN,40,640,0.6953125
+Vanilla 4 Layer GCN,40,640,0.5140625
+1 hop SimpleGCN,40,640,0.446875
+3 hop SimpleGCN,40,640,0.7484375
+2 Layer 4 Heads Concat GatGCN,40,640,0.45625
+2 Layer 2 Heads Concat GatGCN,40,640,0.446875

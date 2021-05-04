@@ -1,0 +1,193 @@
+Vanilla 1 Layer GCN,40,80,0.625
+Vanilla 1 Layer GCN,40,160,0.63125
+Vanilla 1 Layer GCN,40,320,0.621875
+Vanilla 1 Layer GCN,40,640,0.5984375
+Vanilla 1 Layer GCN,40,2560,0.3375
+Vanilla 1 Layer GCN,80,80,0.65
+Vanilla 1 Layer GCN,80,160,0.73125
+Vanilla 1 Layer GCN,80,320,0.709375
+Vanilla 1 Layer GCN,80,640,0.5734375
+Vanilla 1 Layer GCN,80,2560,0.643359375
+Vanilla 1 Layer GCN,160,80,0.75
+Vanilla 1 Layer GCN,160,160,0.78125
+Vanilla 1 Layer GCN,160,320,0.8
+Vanilla 1 Layer GCN,160,640,0.7484375
+Vanilla 1 Layer GCN,160,2560,0.650390625
+Vanilla 1 Layer GCN,320,80,0.825
+Vanilla 1 Layer GCN,320,160,0.7625
+Vanilla 1 Layer GCN,320,320,0.828125
+Vanilla 1 Layer GCN,320,640,0.796875
+Vanilla 1 Layer GCN,320,2560,0.73515625
+Vanilla 1 Layer GCN,640,80,0.825
+Vanilla 1 Layer GCN,640,160,0.8875
+Vanilla 1 Layer GCN,640,320,0.784375
+Vanilla 1 Layer GCN,640,640,0.8125
+Vanilla 1 Layer GCN,640,2560,0.819140625
+Vanilla 1 Layer GCN,1280,80,0.9
+Vanilla 1 Layer GCN,1280,160,0.8375
+Vanilla 1 Layer GCN,1280,320,0.865625
+Vanilla 1 Layer GCN,1280,640,0.8578125
+Vanilla 1 Layer GCN,1280,2560,0.82265625
+Vanilla 2 Layer GCN,40,80,0.75
+Vanilla 2 Layer GCN,40,160,0.71875
+Vanilla 2 Layer GCN,40,320,0.73125
+Vanilla 2 Layer GCN,40,640,0.7140625
+Vanilla 2 Layer GCN,40,2560,0.675
+Vanilla 2 Layer GCN,80,80,0.7875
+Vanilla 2 Layer GCN,80,160,0.83125
+Vanilla 2 Layer GCN,80,320,0.740625
+Vanilla 2 Layer GCN,80,640,0.8140625
+Vanilla 2 Layer GCN,80,2560,0.745703125
+Vanilla 2 Layer GCN,160,80,0.825
+Vanilla 2 Layer GCN,160,160,0.86875
+Vanilla 2 Layer GCN,160,320,0.834375
+Vanilla 2 Layer GCN,160,640,0.821875
+Vanilla 2 Layer GCN,160,2560,0.795703125
+Vanilla 2 Layer GCN,320,80,0.7875
+Vanilla 2 Layer GCN,320,160,0.9
+Vanilla 2 Layer GCN,320,320,0.81875
+Vanilla 2 Layer GCN,320,640,0.8359375
+Vanilla 2 Layer GCN,320,2560,0.840234375
+Vanilla 2 Layer GCN,640,80,0.9
+Vanilla 2 Layer GCN,640,160,0.84375
+Vanilla 2 Layer GCN,640,320,0.865625
+Vanilla 2 Layer GCN,640,640,0.8875
+Vanilla 2 Layer GCN,640,2560,0.874609375
+Vanilla 2 Layer GCN,1280,80,0.9
+Vanilla 2 Layer GCN,1280,160,0.875
+Vanilla 2 Layer GCN,1280,320,0.871875
+Vanilla 2 Layer GCN,1280,640,0.8921875
+Vanilla 2 Layer GCN,1280,2560,0.869921875
+Vanilla 4 Layer GCN,40,80,0.6375
+Vanilla 4 Layer GCN,40,160,0.65
+Vanilla 4 Layer GCN,40,320,0.653125
+Vanilla 4 Layer GCN,40,640,0.7140625
+Vanilla 4 Layer GCN,40,2560,0.5890625
+Vanilla 4 Layer GCN,80,80,0.65
+Vanilla 4 Layer GCN,80,160,0.78125
+Vanilla 4 Layer GCN,80,320,0.775
+Vanilla 4 Layer GCN,80,640,0.7796875
+Vanilla 4 Layer GCN,80,2560,0.559765625
+Vanilla 4 Layer GCN,160,80,0.7625
+Vanilla 4 Layer GCN,160,160,0.775
+Vanilla 4 Layer GCN,160,320,0.790625
+Vanilla 4 Layer GCN,160,640,0.7453125
+Vanilla 4 Layer GCN,160,2560,0.765234375
+Vanilla 4 Layer GCN,320,80,0.8375
+Vanilla 4 Layer GCN,320,160,0.76875
+Vanilla 4 Layer GCN,320,320,0.80625
+Vanilla 4 Layer GCN,320,640,0.7703125
+Vanilla 4 Layer GCN,320,2560,0.744140625
+Vanilla 4 Layer GCN,640,80,0.725
+Vanilla 4 Layer GCN,640,160,0.8125
+Vanilla 4 Layer GCN,640,320,0.7875
+Vanilla 4 Layer GCN,640,640,0.7078125
+Vanilla 4 Layer GCN,640,2560,0.781640625
+Vanilla 4 Layer GCN,1280,80,0.7625
+Vanilla 4 Layer GCN,1280,160,0.83125
+Vanilla 4 Layer GCN,1280,320,0.746875
+Vanilla 4 Layer GCN,1280,640,0.80625
+Vanilla 4 Layer GCN,1280,2560,0.740234375
+1 hop SimpleGCN,40,80,0.5875
+1 hop SimpleGCN,40,160,0.66875
+1 hop SimpleGCN,40,320,0.528125
+1 hop SimpleGCN,40,640,0.5875
+1 hop SimpleGCN,40,2560,0.451953125
+1 hop SimpleGCN,80,80,0.775
+1 hop SimpleGCN,80,160,0.7875
+1 hop SimpleGCN,80,320,0.625
+1 hop SimpleGCN,80,640,0.665625
+1 hop SimpleGCN,80,2560,0.594140625
+1 hop SimpleGCN,160,80,0.825
+1 hop SimpleGCN,160,160,0.74375
+1 hop SimpleGCN,160,320,0.821875
+1 hop SimpleGCN,160,640,0.7609375
+1 hop SimpleGCN,160,2560,0.7421875
+1 hop SimpleGCN,320,80,0.8125
+1 hop SimpleGCN,320,160,0.84375
+1 hop SimpleGCN,320,320,0.821875
+1 hop SimpleGCN,320,640,0.809375
+1 hop SimpleGCN,320,2560,0.770703125
+1 hop SimpleGCN,640,80,0.8
+1 hop SimpleGCN,640,160,0.80625
+1 hop SimpleGCN,640,320,0.828125
+1 hop SimpleGCN,640,640,0.8109375
+1 hop SimpleGCN,640,2560,0.790234375
+1 hop SimpleGCN,1280,80,0.875
+1 hop SimpleGCN,1280,160,0.84375
+1 hop SimpleGCN,1280,320,0.8375
+1 hop SimpleGCN,1280,640,0.859375
+1 hop SimpleGCN,1280,2560,0.844921875
+3 hop SimpleGCN,40,80,0.6875
+3 hop SimpleGCN,40,160,0.725
+3 hop SimpleGCN,40,320,0.671875
+3 hop SimpleGCN,40,640,0.675
+3 hop SimpleGCN,40,2560,0.765625
+3 hop SimpleGCN,80,80,0.7375
+3 hop SimpleGCN,80,160,0.8125
+3 hop SimpleGCN,80,320,0.796875
+3 hop SimpleGCN,80,640,0.78125
+3 hop SimpleGCN,80,2560,0.7828125
+3 hop SimpleGCN,160,80,0.875
+3 hop SimpleGCN,160,160,0.79375
+3 hop SimpleGCN,160,320,0.796875
+3 hop SimpleGCN,160,640,0.828125
+3 hop SimpleGCN,160,2560,0.824609375
+3 hop SimpleGCN,320,80,0.875
+3 hop SimpleGCN,320,160,0.85625
+3 hop SimpleGCN,320,320,0.83125
+3 hop SimpleGCN,320,640,0.8515625
+3 hop SimpleGCN,320,2560,0.83203125
+3 hop SimpleGCN,640,80,0.8125
+3 hop SimpleGCN,640,160,0.875
+3 hop SimpleGCN,640,320,0.853125
+3 hop SimpleGCN,640,640,0.8875
+3 hop SimpleGCN,640,2560,0.869921875
+3 hop SimpleGCN,1280,80,0.925
+3 hop SimpleGCN,1280,160,0.8875
+3 hop SimpleGCN,1280,320,0.88125
+3 hop SimpleGCN,1280,640,0.89375
+3 hop SimpleGCN,1280,2560,0.8859375
+2 Layer 4 Heads Concat GatGCN,40,80,0.375
+2 Layer 4 Heads Concat GatGCN,40,160,0.45
+2 Layer 4 Heads Concat GatGCN,40,320,0.390625
+2 Layer 4 Heads Concat GatGCN,40,640,0.4484375
+2 Layer 4 Heads Concat GatGCN,80,80,0.575
+2 Layer 4 Heads Concat GatGCN,80,160,0.51875
+2 Layer 4 Heads Concat GatGCN,80,320,0.575
+2 Layer 4 Heads Concat GatGCN,80,640,0.5609375
+2 Layer 4 Heads Concat GatGCN,160,80,0.6375
+2 Layer 4 Heads Concat GatGCN,160,160,0.7375
+2 Layer 4 Heads Concat GatGCN,160,320,0.546875
+2 Layer 4 Heads Concat GatGCN,160,640,0.5734375
+2 Layer 4 Heads Concat GatGCN,320,80,0.7125
+2 Layer 4 Heads Concat GatGCN,320,160,0.59375
+2 Layer 4 Heads Concat GatGCN,320,320,0.646875
+2 Layer 4 Heads Concat GatGCN,320,640,0.790625
+2 Layer 4 Heads Concat GatGCN,640,80,0.75
+2 Layer 4 Heads Concat GatGCN,640,160,0.78125
+2 Layer 4 Heads Concat GatGCN,640,320,0.784375
+2 Layer 4 Heads Concat GatGCN,640,640,0.7859375
+2 Layer 4 Heads Concat GatGCN,1280,80,0.75
+2 Layer 4 Heads Concat GatGCN,1280,160,0.7875
+2 Layer 4 Heads Concat GatGCN,1280,320,0.759375
+2 Layer 4 Heads Concat GatGCN,1280,640,0.765625
+2 Layer 2 Heads Concat GatGCN,40,80,0.4125
+2 Layer 2 Heads Concat GatGCN,40,160,0.5125
+2 Layer 2 Heads Concat GatGCN,40,320,0.4125
+2 Layer 2 Heads Concat GatGCN,40,640,0.3875
+2 Layer 2 Heads Concat GatGCN,80,80,0.3125
+2 Layer 2 Heads Concat GatGCN,80,160,0.5375
+2 Layer 2 Heads Concat GatGCN,80,320,0.53125
+2 Layer 2 Heads Concat GatGCN,80,640,0.5421875
+2 Layer 2 Heads Concat GatGCN,160,80,0.5625
+2 Layer 2 Heads Concat GatGCN,160,160,0.5375
+2 Layer 2 Heads Concat GatGCN,160,320,0.6
+2 Layer 2 Heads Concat GatGCN,160,640,0.515625
+2 Layer 2 Heads Concat GatGCN,320,80,0.775
+2 Layer 2 Heads Concat GatGCN,320,160,0.61875
+2 Layer 2 Heads Concat GatGCN,320,320,0.696875
+2 Layer 2 Heads Concat GatGCN,320,640,0.6734375
+2 Layer 2 Heads Concat GatGCN,640,80,0.75
+2 Layer 2 Heads Concat GatGCN,640,160,0.75
+2 Layer 2 Heads Concat GatGCN,640,320,0.65625

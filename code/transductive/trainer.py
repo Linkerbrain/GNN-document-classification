@@ -8,16 +8,16 @@ from sklearn.model_selection import train_test_split
 import numpy as np
 
 class TransductiveTrainer():
-    def __init__(self, data, model, val_perc=0.3, try_gpu=True):
+    def __init__(self, data, model, try_gpu=True, lr=0.01):
         self.device = "cuda" if try_gpu and torch.cuda.is_available() else "cpu"
         print("[gym] Working with device:", self.device)
 
         self.model = model.to(self.device)
-        self.optimizer = torch.optim.Adam(model.parameters(), lr=0.02) # note big lr
+        self.optimizer = torch.optim.Adam(model.parameters(), lr=lr) # note big lr
 
         self.graph = data.graph
         self.train_labels, self.train_label_idxs, \
-            self.test_labels, self.test_label_idxs = data.get_train_test_data(test_size=val_perc)
+            self.test_labels, self.test_label_idxs = data.get_train_test_data()
 
         self.train_size = len(self.train_labels)
         self.test_size = len(self.test_labels)
@@ -47,7 +47,7 @@ class TransductiveTrainer():
 
         self.epoch += 1
 
-        return loss / self.train_size
+        return float(loss / self.train_size)
 
     def validate(self):
         # This could be done in the train step as well since it does not require much extra calculation
@@ -60,7 +60,7 @@ class TransductiveTrainer():
 
         correct = test_preds.eq(self.test_labels).sum().item()
 
-        return correct / self.test_size
+        return float(correct / self.test_size)
 
     def save_model(self, path):
         pass

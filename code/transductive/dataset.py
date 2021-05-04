@@ -6,8 +6,7 @@ from torch_geometric.data import DataLoader
 from tqdm import tqdm
 
 class TransductiveDataset():
-    # TODO this is currently a copy of inductive i will do it tommorow bye
-    def __init__(self, graph, labels, word_vocab, label_vocab):
+    def __init__(self, graph, train_labels, test_labels, word_vocab, label_vocab):
         # vocabs for later
         self.word_vocab = word_vocab
         self.label_vocab = label_vocab
@@ -18,7 +17,7 @@ class TransductiveDataset():
         self.label_fails = 0
 
         # The Data (the big graph, the labels and what nodes the labels correspond to)
-        self.graph, self.labels, self.node_idx_of_labels = self.create_dataobject(graph, labels)
+        self.graph, self.train_labels, self.train_idx, self.test_labels, self.test_idx = self.create_dataobject(graph, train_labels, test_labels)
 
         # facts
         self.vocab_size = len(self.word_vocab)
@@ -28,7 +27,7 @@ class TransductiveDataset():
         tag = "[dataprep] "
         succes = "Succesfully embedded %d/%d words, %d/%d labels." % (self.word_total-self.word_fails, self.word_total, self.label_total-self.label_fails, self.label_total)
         graph_length = self.graph.num_nodes
-        summary = "Dataset contains %d graphs  with %d nodes" % (1, graph_length)
+        summary = "Dataset contains %d graph with %d nodes" % (1, graph_length)
 
         print("[dataprep]" + succes + "\n" + tag + summary)
 
@@ -59,7 +58,7 @@ class TransductiveDataset():
 
         return torch.tensor(label_idxs, dtype=torch.long)
 
-    def create_dataobject(self, graph, labels):
+    def create_dataobject(self, graph, train_labels, test_labels):
         """
         Create PyTorch Geometric Data objects from the raw graph and save labels and the nodes they correspond to
         """
@@ -68,7 +67,8 @@ class TransductiveDataset():
         ((edge_indices, edge_weights), nodes) = graph
 
         nodes = self.get_nodes_idx(nodes)
-        labels = self.get_labels_idx(labels)
+        train_label_tensor = self.get_labels_idx(train_labels)
+        test_label_tensor = self.get_labels_idx(test_labels)
 
         torch_edges = torch.tensor(edge_indices, dtype=torch.long)
         torch_edge_weights = torch.tensor(edge_weights, dtype=torch.float)
@@ -76,23 +76,23 @@ class TransductiveDataset():
         graph = Data(x=nodes, edge_index=torch_edges, edge_attr=torch_edge_weights)
         graph.num_nodes = len(nodes)
 
-        # WE ASSUME THE DOCUMENTS ARE THE FIRST N NODES IN GRAPH
-        node_idx_of_labels = torch.tensor(list(range(len(labels))), dtype=torch.long)
+        # WE ASSUME THE TRAIN, TEST DOCUMENTS ARE THE FIRST X AND SECOND Y NODES IN GRAPH RESPECTIVELY
+        train_amount = len(train_labels)
+        test_amount = len(test_labels)
+        train_idx = torch.tensor(list(range(train_amount)), dtype=torch.long)
+        test_idx = torch.tensor(list(range(train_amount, train_amount+test_amount)), dtype=torch.long)
 
-        return graph, labels, node_idx_of_labels
+        print("Train shape:", train_idx.shape)
+        print("TEst shape:", test_idx.shape)
 
-    def get_train_test_data(self, test_size):
+        return graph, train_label_tensor, train_idx, test_label_tensor, test_idx
+
+    def get_train_test_data(self):
         """
         Returns train and test labels, with the indexes they correspond to
         """
-        shuffled_idx = torch.randperm(len(self.labels))
-
-        train_amount = int(len(shuffled_idx) * (1-test_size))
-        train_idx = shuffled_idx[:train_amount]
-        test_idx = shuffled_idx[train_amount:]
-
-        return self.labels[train_idx], self.node_idx_of_labels[train_idx], \
-                self.labels[test_idx], self.node_idx_of_labels[test_idx]
+        return self.train_labels, self.train_idx, \
+                self.test_labels, self.test_idx
     
     def __getitem__(self, index):
         return self.labels[index], self.node_idx_of_labels[index]
